@@ -7,8 +7,8 @@ using namespace std;
 
 struct Hero : Entity
 {
+    float speed;
+
     Hero() {}
-
     Hero(const char* path) : Entity(path) {}
-
 };

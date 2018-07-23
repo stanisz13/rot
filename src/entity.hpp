@@ -18,6 +18,6 @@ struct Entity
     Entity(const char* path);
 
     void drawSprite(RenderWindow& window);
-
-    void loadTexture(const char* path);    
+    void loadTexture(const char* path);
+    void move(const Vector2f& v);
 };
