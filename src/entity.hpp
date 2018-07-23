@@ -20,4 +20,5 @@ struct Entity
     void drawSprite(RenderWindow& window);
     void loadTexture(const char* path);
     void move(const Vector2f& v);
+    bool collidesWith(const Entity& two);
 };
