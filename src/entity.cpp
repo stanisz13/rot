@@ -7,6 +7,7 @@ void Entity::init(const char* path)
     sprite.setTexture(tex);
     texSize = tex.getSize();
     sprite.setOrigin(texSize.x/2, texSize.y/2);
+    sprite.setColor(Color(255, 255, 255, 255));
     sprite.setPosition(0, 0);
     pos = {0, 0};
 }

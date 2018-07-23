@@ -91,7 +91,11 @@ void Game::init()
     setUpCameraAndWindow(this);
 
     boi.init("assets/boi.png");
-    boi.speed = 300.0f;
+    boi.speed = 600.0f;
+
+    Obstacle* brock = new Obstacle("assets/brock.png");
+    brock->move(Vector2f(500, 0));
+    obstacles.emplace_back(brock);
 }
 
 void Game::update(const float& dt)
@@ -103,11 +107,25 @@ void Game::update(const float& dt)
 
 void Game::draw()
 {
+    for (unsigned i = 0; i<enemies.size(); ++i)
+    {
+        enemies[i]->drawSprite(window);
+    }
+
+    for (unsigned i = 0; i<obstacles.size(); ++i)
+    {
+        obstacles[i]->drawSprite(window);
+    }
+    
     boi.drawSprite(window);
 }
 
 void Game::deInit()
 {
-
+    for (unsigned i = 0; i < enemies.size(); ++i)
+        delete enemies[i];
+    
+    for (unsigned i = 0; i < obstacles.size(); ++i)
+        delete obstacles[i];
 }
 
