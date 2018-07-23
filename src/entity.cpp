@@ -1,29 +1,27 @@
 #include "entity.hpp"
 
 
-struct Entity
+void Entity::init(const char* path)
 {
-    void init(const char* path)
-    {
-        loadTexture(path);
-        sprite.setTexture(tex);
-        texSize = tex.getSize();
-        sprite.setOrigin(texSize.x/2, texSize.y/2);
-        sprite.setPosition(0, 0);
-    }
+    loadTexture(path);
+    sprite.setTexture(tex);
+    texSize = tex.getSize();
+    sprite.setOrigin(texSize.x/2, texSize.y/2);
+    sprite.setPosition(0, 0);
+}
 
-    Entity(const char* path)
-    {
-        init(path);
-    }
+Entity::Entity(const char* path)
+{
+    init(path);
+}
     
-    void drawSprite(RenderWindow& window)
-    {
-        window.draw(sprite);
-    }
+void Entity::drawSprite(RenderWindow& window)
+{
+    window.draw(sprite);
+}
 
-    void loadTexture(const char* path)
-    {
-        tex.loadFromFile(path);
-    }
-};
+void Entity::loadTexture(const char* path)
+{
+    tex.loadFromFile(path);
+}
+

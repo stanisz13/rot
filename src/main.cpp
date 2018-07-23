@@ -7,28 +7,29 @@ using namespace sf;
 
 int main()
 {
-    RenderWindow window;
-    Game::init(&window);
+    Game game;
     
-    while (Game::window->isOpen())
+    game.init();
+    
+    while (game.window.isOpen())
     {
-        float dt = Game::clock.restart().asSeconds();
+        float dt = game.clock.restart().asSeconds();
         
         Event event;
-        while (Game::window->pollEvent(event))
+        while (game.window.pollEvent(event))
         {
             if (event.type == Event::Closed)
-                Game::window->close();
+                game.window.close();
         }
 
-        Game::update(dt);
+        game.update(dt);
         
-        Game::window->clear();
-        Game::draw();
-        Game::window->display();
+        game.window.clear();
+        game.draw();
+        game.window.display();
     }
 
-    Game::deInit();
+    game.deInit();
 
     return 0;
 }

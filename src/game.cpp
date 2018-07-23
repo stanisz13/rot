@@ -3,28 +3,33 @@
 using namespace sf;
 using namespace std;
 
-namespace Game
+void Game::setUpCameraAndWindow()
 {
-    void init(RenderWindow* windowPass)
-    {
-        window = windowPass;
-        windowDim = {2000, 1300};
-        setUpCameraAndWindow(window, windowDim);
-        boi.init("assets/boi.png");
-    }
-
-    void update(const float& dt)
-    {
-
-    }
-
-    void draw()
-    {
-        boi.drawSprite(window);
-    }
-
-    void deInit()
-    {
-
-    }
+    window.create(VideoMode(windowDim.x, windowDim.y), "Rot.");
+    window.setFramerateLimit(60);
+    View camera({0, 0}, {(float)windowDim.x, (float)windowDim.y});
+    window.setView(camera);
 }
+    
+void Game::init()
+{
+    windowDim = {2000, 1300};
+    setUpCameraAndWindow();
+    boi.init("assets/boi.png");
+}
+
+void Game::update(const float& dt)
+{
+
+}
+
+void Game::draw()
+{
+    boi.drawSprite(window);
+}
+
+void Game::deInit()
+{
+
+}
+

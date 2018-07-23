@@ -6,17 +6,17 @@
 using namespace std;
 using namespace sf;
 
-namespace Game
+struct Game
 {
-    RenderWindow* window;
+    RenderWindow window;
     Vector2u windowDim;
-    
     Clock clock;
-
     Hero boi;
-
-    void init(sf::RenderWindow* windowPass);
+//-------------------------------------
+    void setUpCameraAndWindow();
+    
+    void init();
     void update(const float& dt);
     void draw();
     void deInit();
-}
+};
