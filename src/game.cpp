@@ -60,14 +60,14 @@ void displayCollisionBox(Game* game, const Entity& e)
     box.setSize(texSize);
     box.setFillColor(Color(255, 0, 0, 200));
     box.setPosition(e.pos.x - texSize.x/2, e.pos.y - texSize.y/2);
-    
+
     game->window.draw(box);
 }
 
 void handleHeroMovement(Game* game, Hero* hero, const vector<Obstacle*>& obstacles, const float& dt)
 {
     Vector2f movement = {0, 0};
-    
+
     if (game->keysPressed[Keyboard::W])
     {
         movement += Vector2f(0, -1);
@@ -104,11 +104,43 @@ void handleHeroMovement(Game* game, Hero* hero, const vector<Obstacle*>& obstacl
             {
                 Vector2f currentHeroPosition = hero->pos;
                 hero->move(heroPosBeforeMovement - currentHeroPosition);
+
+                if (movement.x != 0 && movement.y != 0)
+                {
+                    Vector2f beforeSlide = hero->pos;
+                    float avgFriction =
+                        (hero->friction + obstacles[i]->friction)/2;
+
+                    hero->move({movement.x * avgFriction, 0});
+                    if (hero->collidesWith(*obstacles[i]))
+                    {
+                        hero->move(beforeSlide - hero->pos);
+                    }
+
+                    Vector2f afterXTry = hero->pos;
+
+                    hero->move({0, movement.y * avgFriction});
+                    if (hero->collidesWith(*obstacles[i]))
+                    {
+                        hero->move(afterXTry - hero->pos);
+                    }
+
+                    for (unsigned j = 0; j<obstacles.size(); ++j)
+                    {
+                        if (i != j && hero->collidesWith(*obstacles[j]))
+                        {
+                            hero->move(beforeSlide - hero->pos);
+                            break;
+                        }
+                    }
+                }
+
+
             }
-        }    
+        }
     }
 }
-    
+
 void Game::init()
 {
     windowDim = {2000, 1300};
@@ -123,7 +155,7 @@ void Game::init()
 }
 
 void Game::update(const float& dt)
-{    
+{
     handleKeyboardInput(this);
     checkIfWindowClosed(this);
     handleHeroMovement(this, &boi, obstacles, dt);
@@ -140,19 +172,18 @@ void Game::draw()
     {
         obstacles[i]->drawSprite(window);
     }
-    
+
     boi.drawSprite(window);
 
-    displayCollisionBox(this, boi);
-    displayCollisionBox(this, *obstacles[0]);
+    //displayCollisionBox(this, boi);
+    //displayCollisionBox(this, *obstacles[0]);
 }
 
 void Game::deInit()
 {
     for (unsigned i = 0; i < enemies.size(); ++i)
         delete enemies[i];
-    
+
     for (unsigned i = 0; i < obstacles.size(); ++i)
         delete obstacles[i];
 }
-

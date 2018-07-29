@@ -10,6 +10,7 @@ struct Entity
     Sprite sprite;
     Vector2f pos;
     Vector2u texSize;
+    float friction = 0.7f;
 
 
     void init(const char* path);
