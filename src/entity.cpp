@@ -16,13 +16,13 @@ Entity::Entity(const char* path)
 {
     init(path);
 }
-    
-void Entity::drawSprite(RenderWindow& window)
+
+void DrawableSprite::drawSprite(RenderWindow& window)
 {
     window.draw(sprite);
 }
 
-void Entity::loadTexture(const char* path)
+void DrawableSprite::loadTexture(const char* path)
 {
     tex.loadFromFile(path);
 }
@@ -41,7 +41,7 @@ bool Entity::collidesWith(const Entity& two)
     Vector2f p1 = {pos.x - oneTexSize.x/2, pos.y - oneTexSize.y/2};
     Vector2f p2 = {two.pos.x - twoTexSize.x/2, two.pos.y - twoTexSize.y/2};
 
-    
+
     bool collidesX = p1.x + oneTexSize.x >= p2.x &&
         p2.x + twoTexSize.x >= p1.x;
 
@@ -50,4 +50,3 @@ bool Entity::collidesWith(const Entity& two)
 
     return collidesX && collidesY;
 }
-
