@@ -3,11 +3,13 @@
 #include <iostream>
 #include <unordered_map>
 #include <vector>
+#include <cmath>
 
 #include "hero.hpp"
 #include "entity.hpp"
 #include "enemy.hpp"
 #include "obstacle.cpp"
+#include "floor.hpp"
 
 using namespace std;
 using namespace sf;
@@ -20,8 +22,8 @@ struct Game
     Hero boi;
     unordered_map<Keyboard::Key, bool> keysPressed;
     vector<Enemy*> enemies;
-    vector<Obstacle*> obstacles;
-    
+    Floor gameFloor;
+
     void init();
     void update(const float& dt);
     void draw();

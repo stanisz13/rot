@@ -1,5 +1,4 @@
 #include "game.hpp"
-#include <cmath>
 
 using namespace sf;
 using namespace std;
@@ -143,22 +142,21 @@ void handleHeroMovement(Game* game, Hero* hero, const vector<Obstacle*>& obstacl
 
 void Game::init()
 {
-    windowDim = {2000, 1300};
+    windowDim = {1600, 900};
     setUpCameraAndWindow(this);
 
     boi.init("assets/boi.png");
     boi.speed = 600.0f;
+    boi.scale({0.3, 0.3});
 
-    Obstacle* brock = new Obstacle("assets/brock.png");
-    brock->move(Vector2f(500, 0));
-    obstacles.emplace_back(brock);
+    gameFloor.generate({windowDim.x, windowDim.y});
 }
 
 void Game::update(const float& dt)
 {
     handleKeyboardInput(this);
     checkIfWindowClosed(this);
-    handleHeroMovement(this, &boi, obstacles, dt);
+    handleHeroMovement(this, &boi, gameFloor.obstacles, dt);
 }
 
 void Game::draw()
@@ -168,9 +166,9 @@ void Game::draw()
         enemies[i]->drawSprite(window);
     }
 
-    for (unsigned i = 0; i<obstacles.size(); ++i)
+    for (unsigned i = 0; i<gameFloor.obstacles.size(); ++i)
     {
-        obstacles[i]->drawSprite(window);
+        gameFloor.obstacles[i]->drawSprite(window);
     }
 
     boi.drawSprite(window);
@@ -184,6 +182,6 @@ void Game::deInit()
     for (unsigned i = 0; i < enemies.size(); ++i)
         delete enemies[i];
 
-    for (unsigned i = 0; i < obstacles.size(); ++i)
-        delete obstacles[i];
+    for (unsigned i = 0; i < gameFloor.obstacles.size(); ++i)
+        delete gameFloor.obstacles[i];
 }

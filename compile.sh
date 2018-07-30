@@ -1,1 +1,1 @@
-g++ src/main.cpp src/game.cpp src/entity.cpp src/hero.cpp src/enemy.cpp src/obstacle.cpp  -o main -std=c++17 -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -Wall -Wshadow -fsanitize=undefined -fsanitize=address
+g++ src/main.cpp src/floor.cpp src/game.cpp src/entity.cpp src/hero.cpp src/enemy.cpp src/obstacle.cpp  -o main -std=c++17 -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -Wall -Wshadow -fsanitize=undefined -fsanitize=address

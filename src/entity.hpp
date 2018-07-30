@@ -22,6 +22,7 @@ struct Entity : DrawableSprite
 
     virtual void init(const char* path);
     virtual void move(const Vector2f& v);
+    virtual void scale(const Vector2f& v);
     virtual bool collidesWith(const Entity& two);
 
     Entity() {};

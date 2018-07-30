@@ -33,10 +33,17 @@ void Entity::move(const Vector2f& v)
     sprite.setPosition(pos);
 }
 
+void Entity::scale(const Vector2f& v)
+{
+    texSize.x *= v.x;
+    texSize.y *= v.y;
+    sprite.scale(v);
+}
+
 bool Entity::collidesWith(const Entity& two)
 {
-    Vector2f oneTexSize = (Vector2f)tex.getSize();
-    Vector2f twoTexSize = (Vector2f)two.tex.getSize();
+    Vector2f oneTexSize = (Vector2f)texSize;
+    Vector2f twoTexSize = (Vector2f)two.texSize;
 
     Vector2f p1 = {pos.x - oneTexSize.x/2, pos.y - oneTexSize.y/2};
     Vector2f p2 = {two.pos.x - twoTexSize.x/2, two.pos.y - twoTexSize.y/2};
