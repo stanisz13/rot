@@ -161,6 +161,8 @@ void Game::update(const float& dt)
 
 void Game::draw()
 {
+    gameFloor.drawSprite(window);
+
     for (unsigned i = 0; i<enemies.size(); ++i)
     {
         enemies[i]->drawSprite(window);
@@ -184,4 +186,7 @@ void Game::deInit()
 
     for (unsigned i = 0; i < gameFloor.obstacles.size(); ++i)
         delete gameFloor.obstacles[i];
+
+    for (unsigned i = 0; i < gameFloor.mosses.size(); ++i)
+        delete gameFloor.mosses[i];
 }

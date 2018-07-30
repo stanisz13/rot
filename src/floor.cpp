@@ -5,9 +5,7 @@ using namespace std;
 
 void Floor::generate(const Vector2u& floorSize)
 {
-    Image image;
     texSize = floorSize;
-    image.create(texSize.x, texSize.y);
     tex.create(texSize.x, texSize.y);
     pos = {0, 0};
 
@@ -30,5 +28,16 @@ void Floor::generate(const Vector2u& floorSize)
         now->scale({0.3, 0.3});
         obstacles.emplace_back(now);
     }
+
+    for (unsigned i=0; i<mossesNumber; ++i)
+    {
+        Quad* now = new Quad;
+        now->init("assets/moss.png")
+
+        now->move({obstacles[i]->pos.x, obstacles[i]->pos.y});
+        now->scale({0.3, 0.3});
+        mosses.emplace_back(now);
+    }
+
 
 }

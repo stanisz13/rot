@@ -11,6 +11,8 @@ struct Floor : DrawableSprite
 {
     const unsigned obstaclesNumber = 6;
     vector<Obstacle*> obstacles;
+    const unsigned mossesNumber = obstaclesNumber;
+    vector<Quad*> mosses;
 
     void generate(const Vector2u& floorSize);
     Floor() {};
