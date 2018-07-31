@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include "entity.hpp"
 #include "obstacle.hpp"
+#include "quad.hpp"
 #include <vector>
 
 using namespace sf;

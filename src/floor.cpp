@@ -32,9 +32,12 @@ void Floor::generate(const Vector2u& floorSize)
     for (unsigned i=0; i<mossesNumber; ++i)
     {
         Quad* now = new Quad;
-        now->init("assets/moss.png")
+        Obstacle& rock = *obstacles[i];
+        now->init(rock.pos,
+                {rock.texSize.x + 5, rock.texSize.y + 5},
+                Color::Blue);
 
-        now->move({obstacles[i]->pos.x, obstacles[i]->pos.y});
+        now->move({rock.pos.x, rock.pos.y});
         now->scale({0.3, 0.3});
         mosses.emplace_back(now);
     }
