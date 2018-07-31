@@ -1,22 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "drawableBasis.hpp"
 
 using namespace sf;
 using namespace std;
 
-struct DrawableSprite
-{
-    Texture tex;
-    Sprite sprite;
-    Vector2f pos;
-    Vector2u texSize;
-
-    virtual void drawSprite(RenderWindow& window);
-    virtual void loadTexture(const char* path);
-    virtual ~DrawableSprite() {};
-};
-
-struct Entity : DrawableSprite
+struct Entity : DrawableBasis
 {
     float friction = 0.7f;
 

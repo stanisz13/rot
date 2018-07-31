@@ -140,10 +140,25 @@ void handleHeroMovement(Game* game, Hero* hero, const vector<Obstacle*>& obstacl
     }
 }
 
+void loadTexture(Game* game, const string& name)
+{
+    Texture tmp;
+    tmp.loadFromFile("assets/" + name + ".png");
+    game->textures[name] = tmp;
+}
+
+void loadTextures(Game* game)
+{
+    loadTexture(game, "boi");
+    loadTexture(game, "brock");
+    loadTexture(game, "moss");
+}
+
 void Game::init()
 {
     windowDim = {1600, 900};
     setUpCameraAndWindow(this);
+    loadTextures(this);
 
     boi.init("assets/boi.png");
     boi.speed = 600.0f;

@@ -7,10 +7,6 @@ using namespace std;
 
 void Floor::generate(const Vector2u& floorSize)
 {
-    texSize = floorSize;
-    tex.create(texSize.x, texSize.y);
-    pos = {0, 0};
-
     for (unsigned i=0; i<obstaclesNumber; ++i)
     {
         Obstacle* now = new Obstacle;
@@ -31,17 +27,16 @@ void Floor::generate(const Vector2u& floorSize)
         obstacles.emplace_back(now);
     }
 
+    Texture mossTex;
+    mossTex.loadFromFile("assets/moss.png");
     for (unsigned i=0; i<mossesNumber; ++i)
     {
-        Quad* now = new Quad;
         Obstacle& rock = *obstacles[i];
 
-        Texture mossTex;
-        mossTex.loadFromFile("assets/moss.png");
-
-        now->init(rock.pos,
-                {(float)rock.texSize.x + 50, (float)rock.texSize.y + 50},
-                mossTex);
+        Quad* now = new Quad(rock.pos,
+                            {(float)rock.texSize.x + mossesAddedSize,
+                                (float)rock.texSize.y + mossesAddedSize},
+                            &mossTex);
 
         mosses.emplace_back(now);
     }

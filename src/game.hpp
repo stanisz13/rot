@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <vector>
 #include <cmath>
+#include <unordered_map>
+#include <string>
 
 #include "hero.hpp"
 #include "entity.hpp"
@@ -23,6 +25,8 @@ struct Game
     unordered_map<Keyboard::Key, bool> keysPressed;
     vector<Enemy*> enemies;
     Floor gameFloor;
+    unordered_map<string, Texture> textures;
+
 
     void init();
     void update(const float& dt);

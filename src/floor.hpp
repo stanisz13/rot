@@ -8,11 +8,13 @@
 using namespace sf;
 using namespace std;
 
-struct Floor : DrawableSprite
+struct Floor
 {
     const unsigned obstaclesNumber = 6;
     vector<Obstacle*> obstacles;
+
     const unsigned mossesNumber = obstaclesNumber;
+    const float mossesAddedSize = 50.0f;
     vector<Quad*> mosses;
 
     void generate(const Vector2u& floorSize);
