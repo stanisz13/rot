@@ -161,16 +161,18 @@ void Game::update(const float& dt)
 
 void Game::draw()
 {
-    gameFloor.drawSprite(window);
+    for (unsigned i = 0; i<gameFloor.mosses.size(); ++i)
+    {
+        gameFloor.mosses[i]->draw(window);
+    }
+    for (unsigned i = 0; i<gameFloor.obstacles.size(); ++i)
+    {
+        gameFloor.obstacles[i]->drawSprite(window);
+    }
 
     for (unsigned i = 0; i<enemies.size(); ++i)
     {
         enemies[i]->drawSprite(window);
-    }
-
-    for (unsigned i = 0; i<gameFloor.obstacles.size(); ++i)
-    {
-        gameFloor.obstacles[i]->drawSprite(window);
     }
 
     boi.drawSprite(window);

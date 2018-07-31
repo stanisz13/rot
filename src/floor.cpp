@@ -1,4 +1,6 @@
 #include "floor.hpp"
+#include <iostream>
+
 
 using namespace sf;
 using namespace std;
@@ -33,12 +35,14 @@ void Floor::generate(const Vector2u& floorSize)
     {
         Quad* now = new Quad;
         Obstacle& rock = *obstacles[i];
-        now->init(rock.pos,
-                {rock.texSize.x + 5, rock.texSize.y + 5},
-                Color::Blue);
 
-        now->move({rock.pos.x, rock.pos.y});
-        now->scale({0.3, 0.3});
+        Texture mossTex;
+        mossTex.loadFromFile("assets/moss.png");
+
+        now->init(rock.pos,
+                {(float)rock.texSize.x + 50, (float)rock.texSize.y + 50},
+                mossTex);
+
         mosses.emplace_back(now);
     }
 

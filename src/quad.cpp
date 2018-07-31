@@ -9,7 +9,7 @@ void Quad::init(const Vector2f& position, const Vector2f& dimensions,
 
     box.setSize(size);
     box.setFillColor(color);
-    box.setOrigin(pos.x/2, pos.y/2);
+    box.setOrigin(size.x/2, size.y/2);
     box.setPosition(pos);
 }
 Quad::Quad(const Vector2f& position, const Vector2f& dimensions,
@@ -22,12 +22,10 @@ void Quad::init(const Vector2f& position, const Vector2f& dimensions,
 {
     pos = position;
     size = dimensions;
-    color = Color::Red;
     tex = texture;
 
     box.setSize(size);
-    box.setFillColor(color);
-    box.setOrigin(pos.x/2, pos.y/2);
+    box.setOrigin(size.x/2, size.y/2);
     box.setPosition(pos);
     box.setTexture(&tex, 0);
 }
