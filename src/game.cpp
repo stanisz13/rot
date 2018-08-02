@@ -3,19 +3,19 @@
 using namespace sf;
 using namespace std;
 
-float vecLen(const Vector2f& v)
+inline float vecLen(const Vector2f& v)
 {
     return sqrt(v.x*v.x + v.y*v.y);
 }
 
-void normalize(Vector2f& v)
+inline void normalize(Vector2f& v)
 {
     float len = vecLen(v);
     if (len)
         v /= vecLen(v);
 }
 
-void setUpCameraAndWindow(Game* game)
+inline void setUpCameraAndWindow(Game* game)
 {
     game->window.create(VideoMode(game->windowDim.x, game->windowDim.y), "Rot.");
     game->window.setFramerateLimit(60);
@@ -23,7 +23,7 @@ void setUpCameraAndWindow(Game* game)
     game->window.setView(camera);
 }
 
-void handleOneKey(Game* game, const Keyboard::Key& key)
+inline void handleOneKey(Game* game, const Keyboard::Key& key)
 {
     if (Keyboard::isKeyPressed(key))
     {
@@ -35,7 +35,7 @@ void handleOneKey(Game* game, const Keyboard::Key& key)
     }
 }
 
-void handleKeyboardInput(Game* game)
+inline void handleKeyboardInput(Game* game)
 {
     handleOneKey(game, Keyboard::Escape);
     handleOneKey(game, Keyboard::W);
@@ -44,7 +44,7 @@ void handleKeyboardInput(Game* game)
     handleOneKey(game, Keyboard::D);
 }
 
-void checkIfWindowClosed(Game* game)
+inline void checkIfWindowClosed(Game* game)
 {
     if (game->keysPressed[Keyboard::Escape])
     {
@@ -52,10 +52,10 @@ void checkIfWindowClosed(Game* game)
     }
 }
 
-void displayCollisionBox(Game* game, const Entity& e)
+inline void displayCollisionBox(Game* game, const Entity& e)
 {
     RectangleShape box;
-    Vector2f texSize = (Vector2f)e.tex.getSize();
+    Vector2f texSize = (Vector2f)e.tex->getSize();
     box.setSize(texSize);
     box.setFillColor(Color(255, 0, 0, 200));
     box.setPosition(e.pos.x - texSize.x/2, e.pos.y - texSize.y/2);
@@ -63,7 +63,7 @@ void displayCollisionBox(Game* game, const Entity& e)
     game->window.draw(box);
 }
 
-void handleHeroMovement(Game* game, Hero* hero, const vector<Obstacle*>& obstacles, const float& dt)
+inline void handleHeroMovement(Game* game, Hero* hero, const vector<Obstacle*>& obstacles, const float& dt)
 {
     Vector2f movement = {0, 0};
 
@@ -140,14 +140,14 @@ void handleHeroMovement(Game* game, Hero* hero, const vector<Obstacle*>& obstacl
     }
 }
 
-void loadTexture(Game* game, const string& name)
+inline void loadTexture(Game* game, const string& name)
 {
     Texture tmp;
     tmp.loadFromFile("assets/" + name + ".png");
     game->textures[name] = tmp;
 }
 
-void loadTextures(Game* game)
+inline void loadTextures(Game* game)
 {
     loadTexture(game, "boi");
     loadTexture(game, "brock");
@@ -160,11 +160,12 @@ void Game::init()
     setUpCameraAndWindow(this);
     loadTextures(this);
 
-    boi.init("assets/boi.png");
+    Texture* boiTex = &textures["boi"];
+    boi.init({0, 0}, (Vector2f)boiTex->getSize(), boiTex);
     boi.speed = 600.0f;
     boi.scale({0.3, 0.3});
 
-    gameFloor.generate({windowDim.x, windowDim.y});
+    gameFloor.generate(textures, {windowDim.x, windowDim.y});
 }
 
 void Game::update(const float& dt)
@@ -178,19 +179,19 @@ void Game::draw()
 {
     for (unsigned i = 0; i<gameFloor.mosses.size(); ++i)
     {
-        gameFloor.mosses[i]->draw(window);
+        window.draw(gameFloor.mosses[i]->box);
     }
     for (unsigned i = 0; i<gameFloor.obstacles.size(); ++i)
     {
-        gameFloor.obstacles[i]->drawSprite(window);
+        window.draw(gameFloor.obstacles[i]->sprite);
     }
 
     for (unsigned i = 0; i<enemies.size(); ++i)
     {
-        enemies[i]->drawSprite(window);
+        window.draw(enemies[i]->sprite);
     }
 
-    boi.drawSprite(window);
+    window.draw(boi.sprite);
 
     //displayCollisionBox(this, boi);
     //displayCollisionBox(this, *obstacles[0]);

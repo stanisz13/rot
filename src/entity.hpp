@@ -7,14 +7,20 @@ using namespace std;
 
 struct Entity : DrawableBasis
 {
+    Sprite sprite;
     float friction = 0.7f;
+    float speed;
 
-    virtual void init(const char* path);
-    virtual void move(const Vector2f& v);
-    virtual void scale(const Vector2f& v);
-    virtual bool collidesWith(const Entity& two);
+    void move(const Vector2f& v);
+    void scale(const Vector2f& v);
+    bool collidesWith(const Entity& two);
 
     Entity() {};
-    Entity(const char* path);
     virtual ~Entity() {}
+    virtual void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture) override;
+    virtual void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
+                Color* colorOfObject);
+    Entity(const Vector2f& position, const Vector2f& dimensions, Texture* texture);
+    Entity(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
+                Color* colorOfObject);
 };

@@ -4,6 +4,7 @@
 #include "obstacle.hpp"
 #include "quad.hpp"
 #include <vector>
+#include <unordered_map>
 
 using namespace sf;
 using namespace std;
@@ -17,6 +18,6 @@ struct Floor
     const float mossesAddedSize = 50.0f;
     vector<Quad*> mosses;
 
-    void generate(const Vector2u& floorSize);
+    void generate(unordered_map<string, Texture>& textures, const Vector2u& floorSize);
     Floor() {};
 };

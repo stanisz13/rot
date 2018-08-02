@@ -7,8 +7,12 @@ using namespace std;
 
 struct Hero : Entity
 {
-    float speed;
-
     Hero() {}
-    Hero(const char* path) : Entity(path) {}
+    virtual ~Hero() {}
+    void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture) override;
+    void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
+                Color* colorOfObject) override;
+    Hero(const Vector2f& position, const Vector2f& dimensions, Texture* texture);
+    Hero(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
+            Color* colorOfObject);
 };

@@ -13,8 +13,8 @@ struct DrawableBasis
     Color* color;
 
     DrawableBasis() {};
-    void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture);
-    void init(const Vector2f& position, const Vector2f& dimensions, Color* colorOfObject);
+    virtual void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture);
+    virtual void init(const Vector2f& position, const Vector2f& dimensions, Color* colorOfObject);
     DrawableBasis(const Vector2f& position, const Vector2f& dimensions, Texture* texture);
     DrawableBasis(const Vector2f& position, const Vector2f& dimensions, Color* colorOfObject);
 };

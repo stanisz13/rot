@@ -7,8 +7,11 @@ using namespace std;
 
 struct Enemy : Entity
 {
-    float speed;
-
     Enemy() {}
-    Enemy(const char* path) : Entity(path) {}
+    void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture) override;
+    void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
+                Color* colorOfObject) override;
+    Enemy(const Vector2f& position, const Vector2f& dimensions, Texture* texture);
+    Enemy(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
+            Color* colorOfObject);
 };

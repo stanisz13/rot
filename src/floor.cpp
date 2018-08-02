@@ -5,12 +5,11 @@
 using namespace sf;
 using namespace std;
 
-void Floor::generate(const Vector2u& floorSize)
+void Floor::generate(unordered_map<string, Texture>& textures, const Vector2u& floorSize)
 {
     for (unsigned i=0; i<obstaclesNumber; ++i)
     {
         Obstacle* now = new Obstacle;
-        now->init("assets/brock.png");
         unsigned randOffset = 300;
         int xRand = rand()%(floorSize.x/2 - randOffset) + randOffset;
         int yRand = rand()%(floorSize.y/2 - randOffset) + randOffset;
@@ -22,21 +21,22 @@ void Floor::generate(const Vector2u& floorSize)
         {
             yRand *= -1;
         }
-        now->move({(float)xRand, (float)yRand});
+
+        Texture* brockTex = &textures["brock"];
+        now->init({(float)xRand, (float)yRand}, (const Vector2f)textures["brock"].getSize(), brockTex);
         now->scale({0.3, 0.3});
         obstacles.emplace_back(now);
     }
 
-    Texture mossTex;
-    mossTex.loadFromFile("assets/moss.png");
+    Texture* mossTex = &textures["moss"];
     for (unsigned i=0; i<mossesNumber; ++i)
     {
         Obstacle& rock = *obstacles[i];
 
         Quad* now = new Quad(rock.pos,
-                            {(float)rock.texSize.x + mossesAddedSize,
-                                (float)rock.texSize.y + mossesAddedSize},
-                            &mossTex);
+                            {(float)rock.size.x + mossesAddedSize,
+                                (float)rock.size.y + mossesAddedSize},
+                            mossTex);
 
         mosses.emplace_back(now);
     }

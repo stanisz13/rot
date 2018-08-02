@@ -1,30 +1,33 @@
 #include "entity.hpp"
 #include <iostream>
 
-void Entity::init(const char* path)
+inline void Entity::init(const Vector2f& position, const Vector2f& dimensions, Texture* texture)
 {
-    loadTexture(path);
-    sprite.setTexture(tex);
-    texSize = tex.getSize();
-    sprite.setOrigin(texSize.x/2, texSize.y/2);
-    sprite.setColor(Color(255, 255, 255, 255));
-    sprite.setPosition(0, 0);
-    pos = {0, 0};
+    DrawableBasis::init(position, dimensions, texture);
+    sprite.setTexture(*tex);
+    sprite.setOrigin(size.x/2, size.y/2);
+    sprite.setPosition(pos.x, pos.y);
 }
 
-Entity::Entity(const char* path)
+inline void Entity::init(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
+                    Color* colorOfObject)
 {
-    init(path);
+    DrawableBasis::init(position, dimensions, texture);
+    sprite.setTexture(*tex);
+    sprite.setOrigin(size.x/2, size.y/2);
+    sprite.setPosition(pos.x, pos.y);
+    sprite.setColor(*colorOfObject);
 }
 
-void DrawableSprite::drawSprite(RenderWindow& window)
-{
-    window.draw(sprite);
-}
 
-void DrawableSprite::loadTexture(const char* path)
+inline Entity::Entity(const Vector2f& position, const Vector2f& dimensions, Texture* texture)
 {
-    tex.loadFromFile(path);
+    init(position, dimensions, texture);
+}
+inline Entity::Entity(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
+                Color* colorOfObject)
+{
+    init(position, dimensions, texture, colorOfObject);
 }
 
 void Entity::move(const Vector2f& v)
@@ -35,15 +38,17 @@ void Entity::move(const Vector2f& v)
 
 void Entity::scale(const Vector2f& v)
 {
-    texSize.x *= v.x;
-    texSize.y *= v.y;
-    sprite.scale(v);
+    scaling.x *= v.x;
+    scaling.y *= v.y;
+    size.x *= v.x;
+    size.y *= v.y;
+    sprite.setScale(scaling.x, scaling.y);
 }
 
 bool Entity::collidesWith(const Entity& two)
 {
-    Vector2f oneTexSize = (Vector2f)texSize;
-    Vector2f twoTexSize = (Vector2f)two.texSize;
+    Vector2f oneTexSize = (Vector2f)size;
+    Vector2f twoTexSize = (Vector2f)two.size;
 
     Vector2f p1 = {pos.x - oneTexSize.x/2, pos.y - oneTexSize.y/2};
     Vector2f p2 = {two.pos.x - twoTexSize.x/2, two.pos.y - twoTexSize.y/2};

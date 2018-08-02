@@ -1,6 +1,6 @@
 #include "drawableBasis.hpp"
 
-void DrawableBasis::init(const Vector2f& position, const Vector2f& dimensions,
+inline void DrawableBasis::init(const Vector2f& position, const Vector2f& dimensions,
       Texture* texture)
 {
     pos = position;
@@ -10,7 +10,7 @@ void DrawableBasis::init(const Vector2f& position, const Vector2f& dimensions,
     tex = texture;
 }
 
-void DrawableBasis::init(const Vector2f& position, const Vector2f& dimensions,
+inline void DrawableBasis::init(const Vector2f& position, const Vector2f& dimensions,
      Color* colorOfObject)
 {
     pos = position;
@@ -20,13 +20,13 @@ void DrawableBasis::init(const Vector2f& position, const Vector2f& dimensions,
     tex = nullptr;
 }
 
-DrawableBasis::DrawableBasis(const Vector2f& position, const Vector2f& dimensions,
+inline DrawableBasis::DrawableBasis(const Vector2f& position, const Vector2f& dimensions,
       Texture* texture)
 {
     init(position, dimensions, texture);
 }
 
-DrawableBasis::DrawableBasis(const Vector2f& position, const Vector2f& dimensions,
+inline DrawableBasis::DrawableBasis(const Vector2f& position, const Vector2f& dimensions,
       Color* colorOfObject)
 {
     init(position, dimensions, colorOfObject);

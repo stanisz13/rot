@@ -7,8 +7,12 @@ using namespace std;
 
 struct Obstacle : Entity
 {
-    float speed;
-
     Obstacle() {}
-    Obstacle(const char* path) : Entity(path) {}
+    virtual ~Obstacle() {}
+    void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture) override;
+    void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
+                Color* colorOfObject) override;
+    Obstacle(const Vector2f& position, const Vector2f& dimensions, Texture* texture);
+    Obstacle(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
+            Color* colorOfObject);
 };
