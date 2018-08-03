@@ -5,8 +5,11 @@
 using namespace sf;
 using namespace std;
 
-void Floor::generate(unordered_map<string, Texture>& textures, const Vector2u& floorSize)
+void Floor::generate(unordered_map<string, Texture*>& textures, const Vector2u& floorSize)
 {
+    Texture* brockTex = textures["brock"];
+    Texture* mossTex = textures["moss"];
+
     for (unsigned i=0; i<obstaclesNumber; ++i)
     {
         Obstacle* now = new Obstacle;
@@ -22,13 +25,11 @@ void Floor::generate(unordered_map<string, Texture>& textures, const Vector2u& f
             yRand *= -1;
         }
 
-        Texture* brockTex = &textures["brock"];
-        now->init({(float)xRand, (float)yRand}, (const Vector2f)textures["brock"].getSize(), brockTex);
+        now->init({(float)xRand, (float)yRand}, brockTex);
         now->scale({0.3, 0.3});
         obstacles.emplace_back(now);
     }
 
-    Texture* mossTex = &textures["moss"];
     for (unsigned i=0; i<mossesNumber; ++i)
     {
         Obstacle& rock = *obstacles[i];

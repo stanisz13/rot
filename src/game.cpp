@@ -133,8 +133,6 @@ inline void handleHeroMovement(Game* game, Hero* hero, const vector<Obstacle*>& 
                         }
                     }
                 }
-
-
             }
         }
     }
@@ -142,8 +140,8 @@ inline void handleHeroMovement(Game* game, Hero* hero, const vector<Obstacle*>& 
 
 inline void loadTexture(Game* game, const string& name)
 {
-    Texture tmp;
-    tmp.loadFromFile("assets/" + name + ".png");
+    Texture* tmp = new Texture;
+    tmp->loadFromFile("assets/" + name + ".png");
     game->textures[name] = tmp;
 }
 
@@ -160,8 +158,8 @@ void Game::init()
     setUpCameraAndWindow(this);
     loadTextures(this);
 
-    Texture* boiTex = &textures["boi"];
-    boi.init({0, 0}, (Vector2f)boiTex->getSize(), boiTex);
+    Texture* boiTex = textures["boi"];
+    boi.init({0, 0}, boiTex);
     boi.speed = 600.0f;
     boi.scale({0.3, 0.3});
 
@@ -207,4 +205,7 @@ void Game::deInit()
 
     for (unsigned i = 0; i < gameFloor.mosses.size(); ++i)
         delete gameFloor.mosses[i];
+
+    for (auto&& e : textures)
+        delete e.second;
 }

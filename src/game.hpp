@@ -25,7 +25,7 @@ struct Game
     unordered_map<Keyboard::Key, bool> keysPressed;
     vector<Enemy*> enemies;
     Floor gameFloor;
-    unordered_map<string, Texture> textures;
+    unordered_map<string, Texture*> textures;
 
 
     void init();
