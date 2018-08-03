@@ -10,6 +10,7 @@ inline void Quad::init(const Vector2f& position, const Vector2f& dimensions,
     box.setOrigin(size.x/2, size.y/2);
     box.setPosition(pos);
 }
+
 inline void Quad::init(const Vector2f& position, const Vector2f& dimensions,
      Texture* texture)
 {
@@ -20,6 +21,17 @@ inline void Quad::init(const Vector2f& position, const Vector2f& dimensions,
     box.setPosition(pos);
     box.setTexture(tex, 0);
 }
+
+inline void Quad::init(const Vector2f& position, Texture* texture)
+{
+    DrawableBasis::init(position, texture);
+
+    box.setSize(size);
+    box.setOrigin(size.x/2, size.y/2);
+    box.setPosition(pos);
+    box.setTexture(tex, 0);
+}
+
 inline Quad::Quad(const Vector2f& position, const Vector2f& dimensions,
      Color* colorOfBox)
 {

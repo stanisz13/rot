@@ -12,6 +12,9 @@ struct Obstacle : Entity
     void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture) override;
     void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
                 Color* colorOfObject) override;
+    void init(const Vector2f& position, Texture* texture) override;
+
+    Obstacle(const Vector2f& position, Texture* texture);
     Obstacle(const Vector2f& position, const Vector2f& dimensions, Texture* texture);
     Obstacle(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
             Color* colorOfObject);

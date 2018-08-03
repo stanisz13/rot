@@ -9,6 +9,14 @@ inline void Entity::init(const Vector2f& position, const Vector2f& dimensions, T
     sprite.setPosition(pos.x, pos.y);
 }
 
+inline void Entity::init(const Vector2f& position, Texture* texture)
+{
+    DrawableBasis::init(position, texture);
+    sprite.setTexture(*tex);
+    sprite.setOrigin(size.x/2, size.y/2);
+    sprite.setPosition(pos.x, pos.y);
+}
+
 inline void Entity::init(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
                     Color* colorOfObject)
 {
@@ -28,6 +36,11 @@ inline Entity::Entity(const Vector2f& position, const Vector2f& dimensions, Text
                 Color* colorOfObject)
 {
     init(position, dimensions, texture, colorOfObject);
+}
+
+inline Entity::Entity(const Vector2f& position, Texture* texture)
+{
+    init(position, texture);
 }
 
 void Entity::move(const Vector2f& v)

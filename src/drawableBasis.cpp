@@ -10,6 +10,16 @@ inline void DrawableBasis::init(const Vector2f& position, const Vector2f& dimens
     tex = texture;
 }
 
+inline void DrawableBasis::init(const Vector2f& position,
+      Texture* texture)
+{
+    pos = position;
+    size = (Vector2f)texture->getSize();
+    color = nullptr;
+    scaling = {1.0f, 1.0f};
+    tex = texture;
+}
+
 inline void DrawableBasis::init(const Vector2f& position, const Vector2f& dimensions,
      Color* colorOfObject)
 {
@@ -30,4 +40,9 @@ inline DrawableBasis::DrawableBasis(const Vector2f& position, const Vector2f& di
       Color* colorOfObject)
 {
     init(position, dimensions, colorOfObject);
+}
+
+inline DrawableBasis::DrawableBasis(const Vector2f& position, Texture* texture)
+{
+    init(position, texture);
 }

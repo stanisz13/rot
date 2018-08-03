@@ -14,7 +14,10 @@ struct Quad : DrawableBasis
     void init(const Vector2f& position, const Vector2f& dimensions,
          Color* colorOfBox) override;
     void init(const Vector2f& position, const Vector2f& dimensions,
-         Texture* texture);
+         Texture* texture) override;
+    void init(const Vector2f& position, Texture* texture) override;
+
+    Quad(const Vector2f& position, Texture* texture);
     Quad(const Vector2f& position, const Vector2f& dimensions,
          Color* colorOfBox);
     Quad(const Vector2f& position, const Vector2f& dimensions,
