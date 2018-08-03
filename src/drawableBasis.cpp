@@ -21,7 +21,7 @@ inline void DrawableBasis::init(const Vector2f& position,
 }
 
 inline void DrawableBasis::init(const Vector2f& position, const Vector2f& dimensions,
-     Color* colorOfObject)
+     Color& colorOfObject)
 {
     pos = position;
     size = dimensions;
@@ -37,7 +37,7 @@ inline DrawableBasis::DrawableBasis(const Vector2f& position, const Vector2f& di
 }
 
 inline DrawableBasis::DrawableBasis(const Vector2f& position, const Vector2f& dimensions,
-      Color* colorOfObject)
+      Color& colorOfObject)
 {
     init(position, dimensions, colorOfObject);
 }

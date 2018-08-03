@@ -52,15 +52,13 @@ inline void checkIfWindowClosed(Game* game)
     }
 }
 
-inline void displayCollisionBox(Game* game, const Entity& e)
+inline void displayCollisionBox(Game* game, const Entity* e)
 {
-    RectangleShape box;
-    Vector2f texSize = (Vector2f)e.tex->getSize();
-    box.setSize(texSize);
-    box.setFillColor(Color(255, 0, 0, 200));
-    box.setPosition(e.pos.x - texSize.x/2, e.pos.y - texSize.y/2);
+    Color c = Color(255, 0, 0, 200);
+    Quad box(e->pos, (Vector2f)e->tex->getSize(), c);
+    box.scale(e->scaling);
 
-    game->window.draw(box);
+    game->window.draw(box.box);
 }
 
 inline void handleHeroMovement(Game* game, Hero* hero, const vector<Obstacle*>& obstacles, const float& dt)
@@ -154,7 +152,6 @@ inline void loadTextures(Game* game)
 
 void Game::init()
 {
-    windowDim = {1600, 900};
     setUpCameraAndWindow(this);
     loadTextures(this);
 
@@ -191,8 +188,8 @@ void Game::draw()
 
     window.draw(boi.sprite);
 
-    //displayCollisionBox(this, boi);
-    //displayCollisionBox(this, *obstacles[0]);
+    displayCollisionBox(this, &boi);
+    displayCollisionBox(this, gameFloor.obstacles[0]);
 }
 
 void Game::deInit()

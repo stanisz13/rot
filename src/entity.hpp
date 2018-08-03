@@ -19,11 +19,11 @@ struct Entity : DrawableBasis
     virtual ~Entity() {}
     virtual void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture) override;
     virtual void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
-                Color* colorOfObject);
+                Color& colorOfObject);
     virtual void init(const Vector2f& position, Texture* texture);
-    
+
     Entity(const Vector2f& position, Texture* texture);
     Entity(const Vector2f& position, const Vector2f& dimensions, Texture* texture);
     Entity(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
-                Color* colorOfObject);
+                Color& colorOfObject);
 };

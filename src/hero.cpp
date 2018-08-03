@@ -11,7 +11,7 @@ inline void Hero::init(const Vector2f& position, Texture* texture)
 }
 
 inline void Hero::init(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
-            Color* colorOfObject)
+            Color& colorOfObject)
 {
     Entity::init(position, dimensions, texture, colorOfObject);
 }
@@ -22,7 +22,7 @@ inline Hero::Hero(const Vector2f& position, const Vector2f& dimensions, Texture*
 }
 
 inline Hero::Hero(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
-        Color* colorOfObject)
+        Color& colorOfObject)
 {
     init(position, dimensions, texture, colorOfObject);
 }

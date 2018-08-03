@@ -19,7 +19,7 @@ using namespace sf;
 struct Game
 {
     RenderWindow window;
-    Vector2u windowDim;
+    Vector2u windowDim = {1600, 900};
     Clock clock;
     Hero boi;
     unordered_map<Keyboard::Key, bool> keysPressed;

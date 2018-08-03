@@ -6,7 +6,7 @@ inline void Obstacle::init(const Vector2f& position, const Vector2f& dimensions,
 }
 
 inline void Obstacle::init(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
-            Color* colorOfObject)
+            Color& colorOfObject)
 {
     Entity::init(position, dimensions, texture, colorOfObject);
 }
@@ -22,7 +22,7 @@ inline Obstacle::Obstacle(const Vector2f& position, const Vector2f& dimensions, 
 }
 
 inline Obstacle::Obstacle(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
-        Color* colorOfObject)
+        Color& colorOfObject)
 {
     init(position, dimensions, texture, colorOfObject);
 }

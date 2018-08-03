@@ -11,11 +11,11 @@ struct Hero : Entity
     virtual ~Hero() {}
     void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture) override;
     void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
-                Color* colorOfObject) override;
+                Color& colorOfObject) override;
     void init(const Vector2f& position, Texture* texture) override;
 
     Hero(const Vector2f& position, Texture* texture);
     Hero(const Vector2f& position, const Vector2f& dimensions, Texture* texture);
     Hero(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
-            Color* colorOfObject);
+            Color& colorOfObject);
 };
