@@ -11,7 +11,7 @@ inline void Enemy::init(const Vector2f& position, Texture* texture)
 }
 
 inline void Enemy::init(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
-            Color* colorOfObject)
+            const Color& colorOfObject)
 {
     Entity::init(position, dimensions, texture, colorOfObject);
 }
@@ -22,7 +22,7 @@ inline Enemy::Enemy(const Vector2f& position, const Vector2f& dimensions, Textur
 }
 
 inline Enemy::Enemy(const Vector2f& position, const Vector2f& dimensions, Texture* texture,
-        Color* colorOfObject)
+        const Color& colorOfObject)
 {
     init(position, dimensions, texture, colorOfObject);
 }

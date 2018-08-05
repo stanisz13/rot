@@ -1,12 +1,12 @@
 #include "quad.hpp"
 
 inline void Quad::init(const Vector2f& position, const Vector2f& dimensions,
-     Color& colorOfBox)
+     const Color& colorOfBox)
 {
     DrawableBasis::init(position, dimensions, colorOfBox);
 
     box.setSize(size);
-    box.setFillColor(*color);
+    box.setFillColor(color);
     box.setOrigin(size.x/2, size.y/2);
     box.setPosition(pos);
 }
@@ -33,7 +33,7 @@ inline void Quad::init(const Vector2f& position, Texture* texture)
 }
 
 inline Quad::Quad(const Vector2f& position, const Vector2f& dimensions,
-     Color& colorOfBox)
+     const Color& colorOfBox)
 {
     init(position, dimensions, colorOfBox);
 }

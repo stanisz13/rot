@@ -52,15 +52,6 @@ inline void checkIfWindowClosed(Game* game)
     }
 }
 
-inline void displayCollisionBox(Game* game, const Entity* e)
-{
-    Color c = Color(255, 0, 0, 200);
-    Quad box(e->pos, (Vector2f)e->tex->getSize(), c);
-    box.scale(e->scaling);
-
-    game->window.draw(box.box);
-}
-
 inline void handleHeroMovement(Game* game, Hero* hero, const vector<Obstacle*>& obstacles, const float& dt)
 {
     Vector2f movement = {0, 0};
@@ -187,9 +178,6 @@ void Game::draw()
     }
 
     window.draw(boi.sprite);
-
-    displayCollisionBox(this, &boi);
-    displayCollisionBox(this, gameFloor.obstacles[0]);
 }
 
 void Game::deInit()

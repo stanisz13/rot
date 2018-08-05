@@ -14,9 +14,9 @@ struct DrawableBasis
 
     DrawableBasis() {};
     virtual void init(const Vector2f& position, const Vector2f& dimensions, Texture* texture);
-    virtual void init(const Vector2f& position, const Vector2f& dimensions, Color& colorOfObject);
+    virtual void init(const Vector2f& position, const Vector2f& dimensions, const Color& colorOfObject);
     virtual void init(const Vector2f& position, Texture* texture);
     DrawableBasis(const Vector2f& position, Texture* texture);
     DrawableBasis(const Vector2f& position, const Vector2f& dimensions, Texture* texture);
-    DrawableBasis(const Vector2f& position, const Vector2f& dimensions, Color& colorOfObject);
+    DrawableBasis(const Vector2f& position, const Vector2f& dimensions, const Color& colorOfObject);
 };
