@@ -139,6 +139,7 @@ inline void loadTextures(Game* game)
     loadTexture(game, "boi");
     loadTexture(game, "brock");
     loadTexture(game, "moss");
+    loadTexture(game, "anim");
 }
 
 void Game::init()
@@ -146,10 +147,12 @@ void Game::init()
     setUpCameraAndWindow(this);
     loadTextures(this);
 
-    Texture* boiTex = textures["boi"];
-    boi.init({0, 0}, boiTex);
+    Texture* boiTex = textures["anim"];
+    boi.init({0, 0}, {(float)boiTex->getSize().x / 4, (float)boiTex->getSize().y / 4}, boiTex);
     boi.speed = 600.0f;
-    boi.scale({0.3, 0.3});
+    boi.scale({3, 3});
+    IntRect rect(0, 0, boi.size.x/boi.scaling.x, boi.size.y/boi.scaling.y);
+    boi.sprite.setTextureRect(rect);
 
     gameFloor.generate(textures, {windowDim.x, windowDim.y});
 }
