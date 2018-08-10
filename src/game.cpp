@@ -185,6 +185,8 @@ void Game::draw()
 
 void Game::deInit()
 {
+    window.close();
+    
     for (unsigned i = 0; i < enemies.size(); ++i)
         delete enemies[i];
 
