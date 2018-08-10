@@ -16,6 +16,15 @@
 using namespace std;
 using namespace sf;
 
+struct AnimatedEntity
+{
+    Entity* e;
+    IntRect rect;
+    unsigned x, y;
+    float time;
+    float frameTime = 1;
+};
+
 struct Game
 {
     RenderWindow window;
@@ -26,6 +35,7 @@ struct Game
     vector<Enemy*> enemies;
     Floor gameFloor;
     unordered_map<string, Texture*> textures;
+    AnimatedEntity animHero;
 
 
     void init();

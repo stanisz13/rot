@@ -52,7 +52,7 @@ inline void checkIfWindowClosed(Game* game)
     }
 }
 
-inline void handleHeroMovement(Game* game, Hero* hero, const vector<Obstacle*>& obstacles, const float& dt)
+inline void handleHeroMovement(Game* game, AnimatedEntity& ae, const vector<Obstacle*>& obstacles, const float& dt)
 {
     Vector2f movement = {0, 0};
 
@@ -80,44 +80,49 @@ inline void handleHeroMovement(Game* game, Hero* hero, const vector<Obstacle*>& 
 
     if (movement != Vector2f(0, 0))
     {
-        movement *= hero->speed;
+        movement *= ae.e->speed;
         movement *= dt;
+        ae.time += dt;
+        if (ae.time >= ae.frameTime)
+        {
 
-        Vector2f heroPosBeforeMovement = hero->pos;
-        hero->move(movement);
+        }
+
+        Vector2f heroPosBeforeMovement = ae.e->pos;
+        ae.e->move(movement);
 
         for (unsigned i = 0; i<obstacles.size(); ++i)
         {
-            if (hero->collidesWith(*obstacles[i]))
+            if (ae.e->collidesWith(*obstacles[i]))
             {
-                Vector2f currentHeroPosition = hero->pos;
-                hero->move(heroPosBeforeMovement - currentHeroPosition);
+                Vector2f currentHeroPosition = ae.e->pos;
+                ae.e->move(heroPosBeforeMovement - currentHeroPosition);
 
                 if (movement.x != 0 && movement.y != 0)
                 {
-                    Vector2f beforeSlide = hero->pos;
+                    Vector2f beforeSlide = ae.e->pos;
                     float avgFriction =
-                        (hero->friction + obstacles[i]->friction)/2;
+                        (ae.e->friction + obstacles[i]->friction)/2;
 
-                    hero->move({movement.x * avgFriction, 0});
-                    if (hero->collidesWith(*obstacles[i]))
+                    ae.e->move({movement.x * avgFriction, 0});
+                    if (ae.e->collidesWith(*obstacles[i]))
                     {
-                        hero->move(beforeSlide - hero->pos);
+                        ae.e->move(beforeSlide - ae.e->pos);
                     }
 
-                    Vector2f afterXTry = hero->pos;
+                    Vector2f afterXTry = ae.e->pos;
 
-                    hero->move({0, movement.y * avgFriction});
-                    if (hero->collidesWith(*obstacles[i]))
+                    ae.e->move({0, movement.y * avgFriction});
+                    if (ae.e->collidesWith(*obstacles[i]))
                     {
-                        hero->move(afterXTry - hero->pos);
+                        ae.e->move(afterXTry - ae.e->pos);
                     }
 
                     for (unsigned j = 0; j<obstacles.size(); ++j)
                     {
-                        if (i != j && hero->collidesWith(*obstacles[j]))
+                        if (i != j && ae.e->collidesWith(*obstacles[j]))
                         {
-                            hero->move(beforeSlide - hero->pos);
+                            ae.e->move(beforeSlide - ae.e->pos);
                             break;
                         }
                     }
@@ -148,7 +153,12 @@ void Game::init()
     loadTextures(this);
 
     Texture* boiTex = textures["anim"];
-    boi.init({0, 0}, {(float)boiTex->getSize().x / 4, (float)boiTex->getSize().y / 4}, boiTex);
+
+    animHero.e = &boi;
+    animHero.rect = {{0, 0}, {(int)boiTex->getSize().x / 4, (int)boiTex->getSize().y / 4}};
+
+    boi.init({(float)animHero.rect.left, (float)animHero.rect.top},
+      {(float)animHero.rect.width, (float)animHero.rect.height}, boiTex);
     boi.speed = 600.0f;
     boi.scale({3, 3});
     IntRect rect(0, 0, boi.size.x/boi.scaling.x, boi.size.y/boi.scaling.y);
@@ -161,7 +171,7 @@ void Game::update(const float& dt)
 {
     handleKeyboardInput(this);
     checkIfWindowClosed(this);
-    handleHeroMovement(this, &boi, gameFloor.obstacles, dt);
+    handleHeroMovement(this, animHero, gameFloor.obstacles, dt);
 }
 
 void Game::draw()
@@ -186,7 +196,7 @@ void Game::draw()
 void Game::deInit()
 {
     window.close();
-    
+
     for (unsigned i = 0; i < enemies.size(); ++i)
         delete enemies[i];
 
