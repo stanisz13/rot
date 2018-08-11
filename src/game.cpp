@@ -52,6 +52,34 @@ inline void checkIfWindowClosed(Game* game)
     }
 }
 
+inline void setAnimFrameToZero(AnimatedEntity& a)
+{
+    a.rect.left = 0;
+    a.rect.top = a.directions[2] * a.dimensionsOfFrame.y;
+    a.e->sprite.setTextureRect(a.rect);
+}
+
+inline void moveAnimOneFrameX(AnimatedEntity& a)
+{
+    if (a.rect.left + a.dimensionsOfFrame.x < a.dimensionsOfFrame.x * a.numberOfFrames)
+    {
+        a.rect.left += a.dimensionsOfFrame.x;
+    }
+    else
+    {
+        a.rect.left = 0;
+    }
+
+    a.e->sprite.setTextureRect(a.rect);
+}
+
+inline void startWalkingInDir(AnimatedEntity& a, int dir)
+{
+    a.rect.left = 0;
+    a.rect.top = a.directions[dir] * a.dimensionsOfFrame.y;
+    a.e->sprite.setTextureRect(a.rect);
+}
+
 inline void handleHeroMovement(Game* game, AnimatedEntity& ae, const vector<Obstacle*>& obstacles, const float& dt)
 {
     Vector2f movement = {0, 0};
@@ -83,9 +111,37 @@ inline void handleHeroMovement(Game* game, AnimatedEntity& ae, const vector<Obst
         movement *= ae.e->speed;
         movement *= dt;
         ae.time += dt;
+
+        int walkingDirNow;
+
+        if (movement.x > 0)
+        {
+            walkingDirNow = 1;
+        }
+        if (movement.x < 0)
+        {
+            walkingDirNow = 3;
+        }
+        if (movement.y < 0)
+        {
+            walkingDirNow = 0;
+        }
+        if (movement.y > 0)
+        {
+            walkingDirNow = 2;
+        }
+
+        if (ae.walkingIndexInDirections != walkingDirNow)
+        {
+            startWalkingInDir(ae, walkingDirNow);
+            ae.time = 0.0f;
+            ae.walkingIndexInDirections = walkingDirNow;
+        }
+
         if (ae.time >= ae.frameTime)
         {
-
+            moveAnimOneFrameX(ae);
+            ae.time = 0.0f;
         }
 
         Vector2f heroPosBeforeMovement = ae.e->pos;
@@ -155,11 +211,12 @@ void Game::init()
     Texture* boiTex = textures["anim"];
 
     animHero.e = &boi;
-    animHero.rect = {{0, 0}, {(int)boiTex->getSize().x / 4, (int)boiTex->getSize().y / 4}};
+    animHero.dimensionsOfFrame = {(int)boiTex->getSize().x / 4, (int)boiTex->getSize().y / 4};
+    animHero.rect = {{0, 0}, animHero.dimensionsOfFrame};
 
     boi.init({(float)animHero.rect.left, (float)animHero.rect.top},
       {(float)animHero.rect.width, (float)animHero.rect.height}, boiTex);
-    boi.speed = 600.0f;
+    boi.speed = 100.0f;
     boi.scale({3, 3});
     IntRect rect(0, 0, boi.size.x/boi.scaling.x, boi.size.y/boi.scaling.y);
     boi.sprite.setTextureRect(rect);

@@ -20,9 +20,12 @@ struct AnimatedEntity
 {
     Entity* e;
     IntRect rect;
-    unsigned x, y;
+    Vector2i dimensionsOfFrame;
     float time;
-    float frameTime = 1;
+    float frameTime = 0.3f;
+    vector<int> directions = {3, 2, 0, 1}; //going: up, right, down, left
+    int numberOfFrames = 4;
+    int walkingIndexInDirections = 2;
 };
 
 struct Game
