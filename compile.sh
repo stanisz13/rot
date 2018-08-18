@@ -1,1 +1,1 @@
-g++ src/main.cpp src/drawableBasis.cpp src/quad.cpp src/floor.cpp src/game.cpp src/entity.cpp src/hero.cpp src/enemy.cpp src/obstacle.cpp  -o main -std=c++17 -lsfml-graphics -lsfml-window -lsfml-system -lsfml-audio -Wall -Wshadow -fsanitize=undefined -fsanitize=address
+time g++ src/graphics.cpp src/main.cpp src/utils.cpp src/glad/glad.c src/stb/stb.cpp -o main -std=c++11 -lGL -lglfw -lX11 -ldl -lXrandr -lpthread -Wall -Wshadow -Wpedantic
