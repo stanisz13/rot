@@ -460,9 +460,16 @@ const WindowData& windowData)
     TextureData* rockTexData = new TextureData;
     initTexture(rockTexData, "assets/white.jpg", 1, 1);
 
-    glm::fvec2 s = getScaler(rockTexData, 0.3f, windowData);
-
     for (int i = 0; i<rocksCount; ++i)
+    {
+        StaticObject& r = rocks[i];
+
+        r.texData = new TextureData;
+        *(r.texData) = *rockTexData;
+    }
+
+    glm::fvec2 s = getScaler(rockTexData, 0.3f, windowData);
+    /*for (int i = 0; i<rocksCount; ++i)
     {
         StaticObject& r = rocks[i];
 
@@ -480,7 +487,17 @@ const WindowData& windowData)
         r.model = glm::scale(r.model, glm::fvec3(r.scaler, 0.0f));
         r.box.position = r.position;
         r.box.size = r.scaler * 2.0f;
-    }
+    }*/
+
+    StaticObject& r = rocks[0];
+    r.position = glm::fvec2(0, 0);
+    r.scaler = s;
+    r.scaler.y = windowData.height / r.texData->height;
+    r.scaler.x = windowData.width * 0.1f / r.texData->width;
+    r.model = glm::translate(glm::fmat4(1), glm::fvec3(r.position, 0.0));
+    r.model = glm::scale(r.model, glm::fvec3(r.scaler, 0.0f));
+    r.box.position = r.position;
+    r.box.size = r.scaler * 2.0f;
 }
 
 bool boundingBoxesCollide(const BoundingBox& a, const BoundingBox& b)
@@ -598,7 +615,7 @@ void updatePlayer(const float dt, Sprite& player, const WindowData& windowData,
 StaticObject rocks[], const int rocksCount)
 {
     updatePlayerPositionAndVelocity(dt, player, windowData);
-    //handlePlayerCollisions(player, rocks, rocksCount);
+    handlePlayerCollisions(player, rocks, rocksCount);
     updatePlayerModel(player);
     updatePlayerAnimations(player);
 }
