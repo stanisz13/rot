@@ -20,7 +20,7 @@ void resize_callback(GLFWwindow* window, int newWidth, int newHeight)
     glViewport(0, 0, newWidth, newHeight);
 }
 
-void loadTexture(textureData* texData)
+void loadTexture(TextureData* texData)
 {
     glGenTextures(1, &texData->texture);
     glBindTexture(GL_TEXTURE_2D, texData->texture);
@@ -54,7 +54,7 @@ void loadTexture(textureData* texData)
     stbi_image_free(data);
 }
 
-void initSprite(sprite& s, const char* pathToTexture, const float windowAspectRatio,
+void initSprite(Sprite& s, const char* pathToTexture, const float windowAspectRatio,
                 const int spritesInOneRow, const int spritesInOneCollumn)
 {
     s.texData->path = pathToTexture;
@@ -249,7 +249,7 @@ GLint CreateShaderProgram(const GLuint VertexShader,
 }
 
 void handlePressedKeys(GLFWwindow* window, std::map<int, bool>& keysPressed,
-sprite& player)
+Sprite& player)
 {
     if (keysPressed[GLFW_KEY_ESCAPE])
     {
@@ -278,7 +278,7 @@ sprite& player)
     }
 }
 
-void updatePlayerPositionAndVelocity(float dt, sprite& player, const WindowData& windowData)
+void updatePlayerPositionAndVelocity(float dt, Sprite& player, const WindowData& windowData)
 {
     player.isMoving = 0;
 
@@ -356,7 +356,7 @@ void CreateAndSetUpWindow(WindowData& windowData)
     return;
 }
 
-void loadUniformLocations(drawingEssentials& de)
+void loadUniformLocations(DrawingEssentials& de)
 {
     de.modelLoc = glGetUniformLocation(de.program, "model");
     de.texLoc = glGetUniformLocation(de.program, "theTexture");
@@ -364,7 +364,7 @@ void loadUniformLocations(drawingEssentials& de)
     de.spritesPerDimensionsLoc = glGetUniformLocation(de.program, "spritesPerDimensions");
 }
 
-void setUpShaderProgramAndVAO(drawingEssentials& de)
+void setUpShaderProgramAndVAO(DrawingEssentials& de)
 {
     GLuint VertexShader = CreateShader("src/shaders/basic.vs", 0);
     GLuint FragmentShader = CreateShader("src/shaders/basic.fs", 1);
@@ -397,7 +397,7 @@ void setUpShaderProgramAndVAO(drawingEssentials& de)
     return 1;
 }
 
-bool initDrawingEssentials(drawingEssentials& de,
+bool initDrawingEssentials(DrawingEssentials& de,
 WindowData& windowData)
 {
     if (!initializeGL(windowData))
@@ -411,14 +411,14 @@ WindowData& windowData)
     return 1;
 }
 
-glm::fvec2 getBasicScaler(textureData* data,
+glm::fvec2 getBasicScaler(TextureData* data,
 const WindowData& windowData)
 {
 
     return {data->width / windowData.width, data->height / windowData.height};
 }
 
-glm::fvec2 getScaler(textureData* data, const float& factor,
+glm::fvec2 getScaler(TextureData* data, const float& factor,
 const WindowData& windowData)
 {
 
@@ -429,7 +429,7 @@ const WindowData& windowData)
     return res;
 }
 
-void initTexture(textureData* data, const char* path,
+void initTexture(TextureData* data, const char* path,
      int spritesInOneRow, int spritesInOneCollumn)
 {
     data->path = path;
@@ -438,34 +438,11 @@ void initTexture(textureData* data, const char* path,
     loadTexture(data);
 }
 
-void initParticles(particle particles[], const int particlesCount,
-std::map<std::string, textureData*>& textureDatas,
+void initPlayer(Sprite& player,
 const WindowData& windowData)
 {
-    textureData* particleTexData = textureDatas["particle"];
-    initTexture(particleTexData, "assets/pink.png", 1, 1);
+    player.texData = new TextureData;
 
-    float scalingFactor = 0.1f;
-    glm::fvec2 s = getScaler(particleTexData, scalingFactor, windowData);
-
-    for (int i = 0; i<particlesCount; ++i)
-    {
-        particle& p = particles[i];
-
-        p.position = glm::fvec2((float)glm::sin(i), (float)glm::cos(i));
-        p.velocity = glm::fvec2(0);
-        p.model = glm::translate(glm::fmat4(1), glm::fvec3(p.position, 0.0f));
-
-        p.scaler = s;
-
-        p.model = glm::scale(p.model, glm::fvec3(p.scaler, 0.0f));
-        p.speed = 0.0f;
-    }
-}
-
-void initPlayer(sprite& player,
-const WindowData& windowData)
-{
     initSprite(player, "assets/walk.png", windowData.aspectRatio,
                 9, 4);
     player.speed = 0.9;
@@ -477,18 +454,20 @@ const WindowData& windowData)
     player.box.size = player.scaler * 2.0f;
 }
 
-void initRocks(staticObject rocks[], const int rocksCount,
-std::map<std::string, textureData*>& textureDatas,
+void initRocks(StaticObject rocks[], const int rocksCount,
 const WindowData& windowData)
 {
-    textureData* rockTexData = textureDatas["rock"];
+    TextureData* rockTexData = new TextureData;
     initTexture(rockTexData, "assets/white.jpg", 1, 1);
 
     glm::fvec2 s = getScaler(rockTexData, 0.3f, windowData);
 
     for (int i = 0; i<rocksCount; ++i)
     {
-        staticObject& r = rocks[i];
+        StaticObject& r = rocks[i];
+
+        r.texData = new TextureData;
+        *(r.texData) = *rockTexData;
 
         float randW, randH;
         randW = rand()%(2*windowData.width) - windowData.width;
@@ -504,7 +483,7 @@ const WindowData& windowData)
     }
 }
 
-bool boundingBoxesCollide(const boundingBox& a, const boundingBox& b)
+bool boundingBoxesCollide(const BoundingBox& a, const BoundingBox& b)
 {
     glm::fvec2 p1 = {a.position.x - a.size.x/2, a.position.y - a.size.y/2};
     glm::fvec2 p2 = {b.position.x - b.size.x/2, b.position.y - b.size.y/2};
@@ -518,13 +497,13 @@ bool boundingBoxesCollide(const boundingBox& a, const boundingBox& b)
     return collidesX && collidesY;
 }
 
-void handlePlayerCollisions(sprite& player, staticObject rocks[],
+void handlePlayerCollisions(Sprite& player, StaticObject rocks[],
 const int rocksCount)
 {
     player.box.position = player.position;
     for (int i = 0; i<rocksCount; ++i)
     {
-        staticObject& r = rocks[i];
+        StaticObject& r = rocks[i];
 
         if (boundingBoxesCollide(player.box, r.box))
         {
@@ -537,7 +516,7 @@ const int rocksCount)
     }
 }
 
-void draw(const sprite& s, const drawingEssentials& de)
+void draw(const Sprite& s, const DrawingEssentials& de)
 {
     glUniform2f(de.spritesPerDimensionsLoc, s.texData->spritesInOneRow, s.texData->spritesInOneCollumn);
     glUniform2f(de.positionOfTexLoc, s.positionOfTex.x, s.positionOfTex.y);
@@ -546,7 +525,7 @@ void draw(const sprite& s, const drawingEssentials& de)
     glDrawElements(GL_TRIANGLE_STRIP, 6, GL_UNSIGNED_INT, 0);
 }
 
-void draw(const staticObject& o, const drawingEssentials& de)
+void draw(const StaticObject& o, const DrawingEssentials& de)
 {
     glUniform2f(de.spritesPerDimensionsLoc, 1, 1);
     glUniform2f(de.positionOfTexLoc, 0, 0);
@@ -555,7 +534,7 @@ void draw(const staticObject& o, const drawingEssentials& de)
     glDrawElements(GL_TRIANGLE_STRIP, 6, GL_UNSIGNED_INT, 0);
 }
 
-void draw(const particle& p, const drawingEssentials& de)
+void draw(const Particle& p, const DrawingEssentials& de)
 {
     glUniform2f(de.spritesPerDimensionsLoc, 1, 1);
     glUniform2f(de.positionOfTexLoc, 0, 0);
@@ -564,13 +543,13 @@ void draw(const particle& p, const drawingEssentials& de)
     glDrawElements(GL_TRIANGLE_STRIP, 6, GL_UNSIGNED_INT, 0);
 }
 
-void updatePlayerModel(sprite& player)
+void updatePlayerModel(Sprite& player)
 {
     player.model = glm::translate(glm::mat4(1), glm::fvec3(player.position, 0));
     player.model = glm::scale(player.model, glm::fvec3(player.scaler, 0));
 }
 
-void updatePlayerAnimations(sprite& player)
+void updatePlayerAnimations(Sprite& player)
 {
     if (player.velocity != player.movementLastFrame or player.animationTime >= player.timeForOneAnimationFrame)
     {
@@ -615,8 +594,8 @@ void updatePlayerAnimations(sprite& player)
     player.velocity = glm::fvec2(0);
 }
 
-void updatePlayer(const float dt, sprite& player, const WindowData& windowData,
-staticObject rocks[], const int rocksCount)
+void updatePlayer(const float dt, Sprite& player, const WindowData& windowData,
+StaticObject rocks[], const int rocksCount)
 {
     updatePlayerPositionAndVelocity(dt, player, windowData);
     //handlePlayerCollisions(player, rocks, rocksCount);

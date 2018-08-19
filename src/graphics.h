@@ -29,13 +29,13 @@ struct WindowData
     const char* name = "2D!";
 };
 
-struct drawingEssentials
+struct DrawingEssentials
 {
     unsigned program, VAO;
     unsigned modelLoc, texLoc, positionOfTexLoc, spritesPerDimensionsLoc;
 };
 
-struct textureData
+struct TextureData
 {
     std::string path;
 
@@ -51,29 +51,29 @@ struct textureData
     int spritesInOneCollumn;
 };
 
-struct boundingBox
+struct BoundingBox
 {
     glm::fvec2 position;
     glm::fvec2 size;
 };
 
-struct drawable
+struct Drawable
 {
     glm::fmat4 model;
     glm::fvec2 scaler;
     glm::fvec2 position;
+
+    TextureData* texData;
 };
 
-struct moving
+struct Moving
 {
     glm::fvec2 velocity;
     float speed;
 };
 
-struct sprite : drawable, moving
+struct Sprite : Drawable, Moving
 {
-    textureData* texData;
-
     glm::fvec2 dashingVector;
     float dashAffection;
     float dashingSpeed;
@@ -85,42 +85,36 @@ struct sprite : drawable, moving
     float animationTime;
     glm::fvec2 movementLastFrame;
 
-    boundingBox box;
+    BoundingBox box;
 };
 
-struct particle : drawable, moving
+struct Particle : Drawable, Moving
 {
 
 };
 
-struct staticObject : drawable
+struct StaticObject : Drawable
 {
-    textureData* texData;
-    boundingBox box;
+    BoundingBox box;
 };
 
-bool initDrawingEssentials(drawingEssentials& de,
+bool initDrawingEssentials(DrawingEssentials& de,
 WindowData& windowData);
 
-void initParticles(particle particles[], const int particlesCount,
-std::map<std::string, textureData*>& textureDatas,
+void initRocks(StaticObject rocks[], const int rocksCount,
 const WindowData& windowData);
 
-void initRocks(staticObject rocks[], const int rocksCount,
-std::map<std::string, textureData*>& textureDatas,
+void initPlayer(Sprite& player,
 const WindowData& windowData);
 
-void initPlayer(sprite& player,
-const WindowData& windowData);
+void draw(const Sprite& s, const DrawingEssentials& de);
 
-void draw(const sprite& s, const drawingEssentials& de);
+void draw(const StaticObject& o, const DrawingEssentials& de);
 
-void draw(const staticObject& o, const drawingEssentials& de);
-
-void draw(const particle& p, const drawingEssentials& de);
+void draw(const Particle& p, const DrawingEssentials& de);
 
 void handlePressedKeys(GLFWwindow* window, std::map<int, bool>& keysPressed,
-sprite& player);
+Sprite& player);
 
-void updatePlayer(const float dt, sprite& player, const WindowData& windowData,
-staticObject rocks[], const int rocksCount);
+void updatePlayer(const float dt, Sprite& player, const WindowData& windowData,
+StaticObject rocks[], const int rocksCount);

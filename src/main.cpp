@@ -16,15 +16,12 @@
 #include "utils.h"
 #include "graphics.h"
 
-std::map<int, bool> keysPressed;
-std::map<std::string, textureData*> textureDatas;
-const int particlesCount = 1000;
-const int rocksCount = 3;
-particle particles[particlesCount];
-staticObject rocks[rocksCount];
-sprite player;
-drawingEssentials basic;
+DrawingEssentials basic;
 WindowData windowData;
+std::map<int, bool> keysPressed;
+const int rocksCount = 5;
+StaticObject rocks[rocksCount];
+Sprite player;
 
 inline bool initAll()
 {
@@ -32,25 +29,15 @@ inline bool initAll()
     {
         return 0;
     }
-
-    player.texData = new textureData;
-    textureDatas["particle"] = new textureData;
-    textureDatas["rock"] = new textureData;
-
+    srand(1337691);
     initPlayer(player, windowData);
-    initParticles(particles, particlesCount, textureDatas, windowData);
-    initRocks(rocks, rocksCount, textureDatas, windowData);
+    initRocks(rocks, rocksCount, windowData);
 
     return 1;
 }
 
 inline void deInitAll()
 {
-    for (auto&& e : textureDatas)
-    {
-        delete e.second;
-    }
-
     delete player.texData;
 
     for (int i = 0; i<rocksCount; ++i)
@@ -71,18 +58,10 @@ inline void drawAll()
     glClearColor(0.2f, 1.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glActiveTexture(GL_TEXTURE0);
-    //PARTICLES---------------------------------------------
-    glBindTexture(GL_TEXTURE_2D, textureDatas["particle"]->texture);
-    for (int i = 0; i<particlesCount; i++)
-    {
-        particle& p = particles[i];
-        draw(p, basic);
-    }
-    //END OF PARTICLES --------------------------------------------------
-    //ROCK-----------------------------------------
-    glBindTexture(GL_TEXTURE_2D, textureDatas["rock"]->texture);
+    //ROCKS-----------------------------------------
     for (auto&& r : rocks)
     {
+        glBindTexture(GL_TEXTURE_2D, r.texData->texture);
         draw(r, basic);
     }
     //END OF ROCK -----------------------------------
