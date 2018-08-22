@@ -574,6 +574,7 @@ const int rocksCount)
             LOG("NIEEE");
         }
     }
+
 }
 
 void draw(const Sprite& s, const DrawingEssentials& de)
