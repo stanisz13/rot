@@ -429,6 +429,27 @@ const WindowData& windowData)
     return res;
 }
 
+glm::fvec2 setScaler(TextureData* data, const float& f1,
+const float& f2, const WindowData& windowData)
+{
+    glm::fvec2 res = {windowData.width / data->width,
+         windowData.height / data->height};
+    res.x *= f1;
+    res.y *= f2;
+    data->width *= f1;
+    data->height *= f2;
+
+    return res;
+}
+
+glm::fvec2 setScaler(TextureData* data, const glm::fvec2 factor,
+const WindowData& windowData)
+{
+    glm::fvec2 res = setScaler(data, factor.x, factor.y, windowData);
+
+    return res;
+}
+
 void initTexture(TextureData* data, const char* path,
      int spritesInOneRow, int spritesInOneCollumn)
 {
@@ -443,8 +464,8 @@ const WindowData& windowData)
 {
     player.texData = new TextureData;
 
-    initSprite(player, "assets/walk.png", windowData.aspectRatio,
-                9, 4);
+    initSprite(player, "assets/box.jpg", windowData.aspectRatio,
+                1, 1);
     player.speed = 0.9;
     player.dashAffection = 1.8f;
     player.positionOfTex = glm::vec2(0, 2);     //facing downwards
@@ -467,8 +488,6 @@ const WindowData& windowData)
         r.texData = new TextureData;
         *(r.texData) = *rockTexData;
     }
-
-    glm::fvec2 s = getScaler(rockTexData, 0.3f, windowData);
     /*for (int i = 0; i<rocksCount; ++i)
     {
         StaticObject& r = rocks[i];
@@ -491,9 +510,7 @@ const WindowData& windowData)
 
     StaticObject& r = rocks[0];
     r.position = glm::fvec2(0, 0);
-    r.scaler = s;
-    r.scaler.y = windowData.height / r.texData->height;
-    r.scaler.x = windowData.width * 0.1f / r.texData->width;
+    r.scaler = setScaler(r.texData, 0.01f, 0.5f, windowData);
     r.model = glm::translate(glm::fmat4(1), glm::fvec3(r.position, 0.0));
     r.model = glm::scale(r.model, glm::fvec3(r.scaler, 0.0f));
     r.box.position = r.position;
