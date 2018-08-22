@@ -418,7 +418,7 @@ const WindowData& windowData)
     return {data->width / windowData.width, data->height / windowData.height};
 }
 
-glm::fvec2 getScaler(TextureData* data, const float& factor,
+glm::fvec2 setScaler(TextureData* data, const float& factor,
 const WindowData& windowData)
 {
 
@@ -471,7 +471,7 @@ const WindowData& windowData)
     player.positionOfTex = glm::vec2(0, 2);     //facing downwards
     player.timeForOneAnimationFrame = 0.2f;
     player.box.position = player.position;
-    player.scaler = getScaler(player.texData, 0.3f, windowData);
+    player.scaler = setScaler(player.texData, 0.3f, windowData);
     player.box.size = player.scaler * 2.0f;
 }
 
@@ -508,13 +508,39 @@ const WindowData& windowData)
         r.box.size = r.scaler * 2.0f;
     }*/
 
-    StaticObject& r = rocks[0];
-    r.position = glm::fvec2(0, 0);
-    r.scaler = setScaler(r.texData, 0.01f, 0.5f, windowData);
-    r.model = glm::translate(glm::fmat4(1), glm::fvec3(r.position, 0.0));
-    r.model = glm::scale(r.model, glm::fvec3(r.scaler, 0.0f));
-    r.box.position = r.position;
-    r.box.size = r.scaler * 2.0f;
+    float thickness = 0.03f; //thickness of the middle object. the rest is
+                            //scaling properly.
+
+    StaticObject& sr = rocks[0];
+    sr.position = glm::fvec2(0, 0);
+    sr.scaler = setScaler(sr.texData, thickness, 1.0f - thickness, windowData);
+
+    StaticObject& top = rocks[1];
+    top.position = glm::fvec2(0, 1.0f - thickness/2);
+    top.scaler = setScaler(top.texData, 1.0f, thickness/2, windowData);
+
+    StaticObject& bot = rocks[2];
+    bot.position = glm::fvec2(0, thickness/2 - 1.0f);
+    bot.scaler = setScaler(bot.texData, 1.0f, thickness/2, windowData);
+
+    StaticObject& right = rocks[3];
+    right.position = glm::fvec2(1.0f - thickness/2, 0.0f);
+    right.scaler = setScaler(right.texData, thickness/2, 1.0f, windowData);
+
+    StaticObject& left = rocks[4];
+    left.position = glm::fvec2(thickness/2 - 1.0f, 0.0f);
+    left.scaler = setScaler(left.texData, thickness/2, 1.0f, windowData);
+
+    for (int i = 0; i<rocksCount; ++i)
+    {
+        StaticObject& r = rocks[i];
+
+        r.model = glm::translate(glm::fmat4(1), glm::fvec3(r.position, 0.0));
+        r.model = glm::scale(r.model, glm::fvec3(r.scaler, 0.0f));
+
+        r.box.position = r.position;
+        r.box.size = r.scaler * 2.0f;
+    }
 }
 
 bool boundingBoxesCollide(const BoundingBox& a, const BoundingBox& b)

@@ -19,7 +19,7 @@
 DrawingEssentials basic;
 WindowData windowData;
 std::map<int, bool> keysPressed;
-const int rocksCount = 1;
+const int rocksCount = 5;
 StaticObject rocks[rocksCount];
 Sprite player;
 
