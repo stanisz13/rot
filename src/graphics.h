@@ -1,9 +1,5 @@
 #pragma once
-/* ========================================================================
-   $File: graphics.cpp $
-   $Date: 18.04.18 $
-   $Creator: Stanisz $
-   ======================================================================== */
+
 #include "glad/glad.h"
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -26,7 +22,7 @@ struct WindowData
     int contextVersionMajor = 3;
     int contextVersionMinor = 3;
     GLFWwindow* pointer;
-    const char* name = "2D!";
+    const char* name = "Pudge wars here";
 };
 
 struct DrawingEssentials
