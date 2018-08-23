@@ -248,9 +248,17 @@ GLint CreateShaderProgram(const GLuint VertexShader,
     return (Program);
 }
 
+void move(Sprite& player, const glm::fvec2& v)
+{
+    player.position += v;
+    player.box.position = player.position;
+    player.box.position += player.box.posOffset;
+}
+
 void handlePressedKeys(GLFWwindow* window, std::map<int, bool>& keysPressed,
 Sprite& player)
 {
+    player.velocity = {0, 0};
     if (keysPressed[GLFW_KEY_ESCAPE])
     {
         glfwSetWindowShouldClose(window, 1);
@@ -299,18 +307,18 @@ void updatePlayerPositionAndVelocity(float dt, Sprite& player, const WindowData&
     {
         player.dashingSpeed = 0.0f;
     }
-
-    if (player.dashingSpeed > 0.0001f)
+    else
     {
         player.dashingSpeed -= dt;
     }
-    else
+
+    if (player.dashingSpeed < 0.0f)
     {
         player.dashingSpeed = 0.0f;
     }
 
     glm::fvec2 aspectOffset = glm::fvec2(1.0f/windowData.aspectRatio, 1.0f);
-    player.position += player.velocity * aspectOffset * dt * (player.speed + player.dashingSpeed);
+    move(player, player.velocity * aspectOffset * dt * (player.speed + player.dashingSpeed));
 }
 
 
@@ -464,15 +472,19 @@ const WindowData& windowData)
 {
     player.texData = new TextureData;
 
-    initSprite(player, "assets/box.jpg", windowData.aspectRatio,
-                1, 1);
+    initSprite(player, "assets/walk.png", windowData.aspectRatio,
+                9, 4);
     player.speed = 0.9;
     player.dashAffection = 1.8f;
     player.positionOfTex = glm::vec2(0, 2);     //facing downwards
     player.timeForOneAnimationFrame = 0.2f;
-    player.box.position = player.position;
+    move(player, {-0.5f, 0});
     player.scaler = setScaler(player.texData, 0.3f, windowData);
     player.box.size = player.scaler * 2.0f;
+    player.box.size.x *= 0.37f; //manual adjustments to fit bounding box better
+                                //beacuse the sheet i downloaded is kinda crappy
+    player.box.size.y *= 0.15f;
+    player.box.posOffset = {0, -0.12f};
 }
 
 void initRocks(StaticObject rocks[], const int rocksCount,
@@ -488,27 +500,8 @@ const WindowData& windowData)
         r.texData = new TextureData;
         *(r.texData) = *rockTexData;
     }
-    /*for (int i = 0; i<rocksCount; ++i)
-    {
-        StaticObject& r = rocks[i];
 
-        r.texData = new TextureData;
-        *(r.texData) = *rockTexData;
-
-        float randW, randH;
-        randW = rand()%(2*windowData.width) - windowData.width;
-        randH = rand()%(2*windowData.height) - windowData.height;
-        normalizeToScreen(randW, randH, windowData);
-
-        r.position = glm::fvec2(randW, randH);
-        r.scaler = s;
-        r.model = glm::translate(glm::fmat4(1), glm::fvec3(r.position, 0.0));
-        r.model = glm::scale(r.model, glm::fvec3(r.scaler, 0.0f));
-        r.box.position = r.position;
-        r.box.size = r.scaler * 2.0f;
-    }*/
-
-    float thickness = 0.03f; //thickness of the middle object. the rest is
+    float thickness = 0.07f; //thickness of the middle object. the rest is
                             //scaling properly.
 
     StaticObject& sr = rocks[0];
@@ -558,20 +551,88 @@ bool boundingBoxesCollide(const BoundingBox& a, const BoundingBox& b)
 }
 
 void handlePlayerCollisions(Sprite& player, StaticObject rocks[],
-const int rocksCount)
+const int rocksCount, const float dt, const glm::fvec2& playerPosBeforeMovement)
 {
-    player.box.position = player.position;
+    float friction = 0.6f;
     for (int i = 0; i<rocksCount; ++i)
     {
         StaticObject& r = rocks[i];
 
         if (boundingBoxesCollide(player.box, r.box))
         {
-            LOG("KARAMBOL XDD");
+            LOG(i);
+            glm::fvec2 currentPlayerPos = player.position;
+            move(player, playerPosBeforeMovement - currentPlayerPos);
+
+            glm::fvec2 beforeSlide = player.position;
+            move(player, {player.velocity.x * dt * friction, 0});
+            if (boundingBoxesCollide(player.box, r.box))
+            {
+                move(player, beforeSlide - player.position);
+            }
+
+            glm::fvec2 afterXTry = player.position;
+            move(player, {0, player.velocity.y * dt * friction});
+            if (boundingBoxesCollide(player.box, r.box))
+            {
+                move(player, afterXTry - player.position);
+            }
+
         }
         else
         {
             LOG("NIEEE");
+        }
+
+        /*
+        for (unsigned i = 0; i<obstacles.size(); ++i)
+        {
+            if (ae.e->collidesWith(*obstacles[i]))
+            {
+                Vector2f currentHeroPosition = ae.e->pos;
+                ae.e->move(heroPosBeforeMovement - currentHeroPosition);
+
+                if (movement.x != 0 && movement.y != 0)
+                {
+                    Vector2f beforeSlide = ae.e->pos;
+                    float avgFriction =
+                        (ae.e->friction + obstacles[i]->friction)/2;
+
+                    ae.e->move({movement.x * avgFriction, 0});
+                    if (ae.e->collidesWith(*obstacles[i]))
+                    {
+                        ae.e->move(beforeSlide - ae.e->pos);
+                    }
+
+                    Vector2f afterXTry = ae.e->pos;
+
+                    ae.e->move({0, movement.y * avgFriction});
+                    if (ae.e->collidesWith(*obstacles[i]))
+                    {
+                        ae.e->move(afterXTry - ae.e->pos);
+                    }
+
+                    for (unsigned j = 0; j<obstacles.size(); ++j)
+                    {
+                        if (i != j && ae.e->collidesWith(*obstacles[j]))
+                        {
+                            ae.e->move(beforeSlide - ae.e->pos);
+                            break;
+                        }
+                    }
+                }
+            }
+
+        */
+    }
+
+    for (int i = 0; i<rocksCount; ++i)
+    {
+        StaticObject& r = rocks[i];
+        if (boundingBoxesCollide(player.box, r.box))
+        {
+            move(player, playerPosBeforeMovement - player.position);
+            break;
         }
     }
 
@@ -658,8 +719,9 @@ void updatePlayerAnimations(Sprite& player)
 void updatePlayer(const float dt, Sprite& player, const WindowData& windowData,
 StaticObject rocks[], const int rocksCount)
 {
+    glm::fvec2 playerPosBeforeMovement = player.position;
     updatePlayerPositionAndVelocity(dt, player, windowData);
-    handlePlayerCollisions(player, rocks, rocksCount);
+    handlePlayerCollisions(player, rocks, rocksCount, dt, playerPosBeforeMovement);
     updatePlayerModel(player);
     updatePlayerAnimations(player);
 }

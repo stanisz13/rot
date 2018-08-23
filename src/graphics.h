@@ -55,6 +55,7 @@ struct BoundingBox
 {
     glm::fvec2 position;
     glm::fvec2 size;
+    glm::fvec2 posOffset;
 };
 
 struct Drawable
