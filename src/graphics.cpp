@@ -560,7 +560,6 @@ const int rocksCount, const float dt, const glm::fvec2& playerPosBeforeMovement)
 
         if (boundingBoxesCollide(player.box, r.box))
         {
-            LOG(i);
             glm::fvec2 currentPlayerPos = player.position;
             move(player, playerPosBeforeMovement - currentPlayerPos);
 
@@ -577,53 +576,7 @@ const int rocksCount, const float dt, const glm::fvec2& playerPosBeforeMovement)
             {
                 move(player, afterXTry - player.position);
             }
-
         }
-        else
-        {
-            LOG("NIEEE");
-        }
-
-        /*
-        for (unsigned i = 0; i<obstacles.size(); ++i)
-        {
-            if (ae.e->collidesWith(*obstacles[i]))
-            {
-                Vector2f currentHeroPosition = ae.e->pos;
-                ae.e->move(heroPosBeforeMovement - currentHeroPosition);
-
-                if (movement.x != 0 && movement.y != 0)
-                {
-                    Vector2f beforeSlide = ae.e->pos;
-                    float avgFriction =
-                        (ae.e->friction + obstacles[i]->friction)/2;
-
-                    ae.e->move({movement.x * avgFriction, 0});
-                    if (ae.e->collidesWith(*obstacles[i]))
-                    {
-                        ae.e->move(beforeSlide - ae.e->pos);
-                    }
-
-                    Vector2f afterXTry = ae.e->pos;
-
-                    ae.e->move({0, movement.y * avgFriction});
-                    if (ae.e->collidesWith(*obstacles[i]))
-                    {
-                        ae.e->move(afterXTry - ae.e->pos);
-                    }
-
-                    for (unsigned j = 0; j<obstacles.size(); ++j)
-                    {
-                        if (i != j && ae.e->collidesWith(*obstacles[j]))
-                        {
-                            ae.e->move(beforeSlide - ae.e->pos);
-                            break;
-                        }
-                    }
-                }
-            }
-
-        */
     }
 
     for (int i = 0; i<rocksCount; ++i)

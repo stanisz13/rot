@@ -109,6 +109,7 @@ int main()
         if (framesSinceTheBeginningOfGame % 1000 == 0)
         {
             LOG(maxTimeToRenderOneFrame * 1000);
+            maxTimeToRenderOneFrame = 0;
         }
 
         float timeAfterFrame = glfwGetTime();
